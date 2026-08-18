@@ -104,8 +104,7 @@
   /* ----------------------------------------------------------- Contact form
      Security posture (see contact.html + README):
        - Delivery via Web3Forms, so there is no backend of ours to attack.
-       - Honeypot (botcheck) + a time-trap catch dumb bots for free.
-       - hCaptcha (Web3Forms' free zero-config) catches the smart ones,
+       - Honeypot (botcheck) + a time-trap catch bots for free, both
          verified server-side by Web3Forms.
        - We only ever send plain text; nothing is rendered as HTML. */
   var form = document.querySelector("[data-contact-form]");
@@ -164,11 +163,6 @@
       // page never looks broken before Web3Forms is set up.
       if (!configured) { showSuccess(); return; }
 
-      // Require the hCaptcha token when the widget is present.
-      var widget = form.querySelector(".h-captcha");
-      var token = (form.querySelector("[name='h-captcha-response']") || {}).value || "";
-      if (widget && !token) { showError(); return; }
-
       if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Sending..."; }
 
       var data = {};
@@ -182,11 +176,10 @@
       .then(function (r) { return r.json(); })
       .then(function (res) {
         if (res && res.success) { showSuccess(); }
-        else { showError(); if (window.hcaptcha) try { window.hcaptcha.reset(); } catch (e) {} }
+        else { showError(); }
       })
       .catch(function () {
         showError();
-        if (window.hcaptcha) try { window.hcaptcha.reset(); } catch (e) {}
       });
     });
 
