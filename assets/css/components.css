@@ -1,0 +1,118 @@
+/* =============================================================================
+   HELLO PEOPLE COMPONENTS
+   Reusable UI classes built entirely on tokens.css. Prefix: .hp-
+   Load order:  tokens.css  →  components.css
+   Rule of the system: solid --hp-blue is the workhorse; the gradient is
+   reserved for the logo, one hero moment, and the closing CTA band.
+   ============================================================================= */
+
+/* ---------------------------------------------------------------- Primitives */
+.hp-eyebrow{
+  font-family:var(--hp-font-body);font-size:var(--hp-text-xs);font-weight:700;
+  letter-spacing:var(--hp-tracking-caps);text-transform:uppercase;color:var(--hp-text-muted);
+}
+.hp-grad-text{
+  background:var(--hp-gradient-text);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+
+/* --------------------------------------------------------------------- Button */
+.hp-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.55em;
+  font-family:var(--hp-font-body);font-weight:600;font-size:.98rem;line-height:1;
+  padding:.8em 1.4em;border-radius:var(--hp-radius-md);border:1px solid transparent;
+  cursor:pointer;text-decoration:none;white-space:nowrap;
+  transition:transform var(--hp-duration-2) var(--hp-ease),
+             box-shadow var(--hp-duration-2) var(--hp-ease),
+             background var(--hp-duration-2) var(--hp-ease);
+}
+.hp-btn:focus-visible{outline:3px solid var(--hp-focus-ring);outline-offset:2px}
+.hp-btn[disabled],.hp-btn.is-disabled{opacity:.5;pointer-events:none}
+.hp-btn .hp-btn__arrow{transition:transform var(--hp-duration-2) var(--hp-ease)}
+.hp-btn:hover .hp-btn__arrow{transform:translateX(3px)}
+
+.hp-btn--primary{background:var(--hp-blue);color:#fff;box-shadow:0 8px 20px rgba(29,80,207,.22)}
+.hp-btn--primary:hover{transform:translateY(-2px);background:var(--hp-blue-800)}
+.hp-btn--ghost{background:var(--hp-surface);color:var(--hp-text-strong);border-color:var(--hp-border-strong)}
+.hp-btn--ghost:hover{transform:translateY(-2px);box-shadow:var(--hp-shadow-md)}
+.hp-btn--subtle{background:var(--hp-accent-quiet);color:var(--hp-accent)}
+.hp-btn--subtle:hover{transform:translateY(-2px)}
+.hp-btn--white{background:#fff;color:#14161D}
+.hp-btn--white:hover{transform:translateY(-2px)}
+/* Gradient button, CTA band ONLY. Do not use in general UI. */
+.hp-btn--gradient{background:var(--hp-gradient);color:#fff;box-shadow:var(--hp-shadow-brand)}
+.hp-btn--gradient:hover{transform:translateY(-2px)}
+
+.hp-btn--sm{font-size:.86rem;padding:.6em 1em;border-radius:var(--hp-radius-sm)}
+.hp-btn--lg{font-size:1.06rem;padding:.95em 1.7em}
+.hp-btn--block{display:flex;width:100%}
+
+/* ---------------------------------------------------------------- Icon button */
+.hp-icon-btn{
+  width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;
+  border-radius:var(--hp-radius-sm);border:1px solid var(--hp-border);background:var(--hp-surface);
+  color:var(--hp-text);cursor:pointer;transition:box-shadow var(--hp-duration-2) var(--hp-ease)}
+.hp-icon-btn:hover{box-shadow:var(--hp-shadow-sm)}
+.hp-icon-btn:focus-visible{outline:3px solid var(--hp-focus-ring);outline-offset:2px}
+
+/* --------------------------------------------------------------- Badge / Pill */
+.hp-badge{
+  display:inline-flex;align-items:center;gap:.4em;font-family:var(--hp-font-body);
+  font-size:var(--hp-text-xs);font-weight:600;line-height:1;padding:.42em .7em;
+  border-radius:var(--hp-radius-pill);border:1px solid transparent}
+.hp-badge--blue{background:var(--hp-accent-quiet);color:var(--hp-accent)}
+.hp-badge--muted{background:var(--hp-surface-2);color:var(--hp-text-muted);border-color:var(--hp-border)}
+.hp-badge--success{background:var(--hp-success-bg);color:var(--hp-success)}
+.hp-badge--warning{background:var(--hp-warning-bg);color:var(--hp-warning)}
+.hp-badge--danger{background:var(--hp-danger-bg);color:var(--hp-danger)}
+.hp-badge--outline{background:transparent;color:var(--hp-text);border-color:var(--hp-border-strong)}
+.hp-badge--dot::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+
+/* ------------------------------------------------------------------ Card */
+.hp-card{
+  background:var(--hp-surface);border:1px solid var(--hp-border);
+  border-radius:var(--hp-radius-lg);box-shadow:var(--hp-shadow-sm);padding:var(--hp-space-6)}
+.hp-card--interactive{transition:transform var(--hp-duration-3) var(--hp-ease),box-shadow var(--hp-duration-3) var(--hp-ease)}
+.hp-card--interactive:hover{transform:translateY(-4px);box-shadow:var(--hp-shadow-lg)}
+.hp-card--flat{box-shadow:none}
+.hp-card__icon{
+  width:46px;height:46px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;
+  background:var(--hp-accent-quiet);color:var(--hp-accent);margin-bottom:var(--hp-space-4)}
+.hp-card__title{font-family:var(--hp-font-display);font-size:var(--hp-text-lg);font-weight:600;
+  color:var(--hp-text-strong);margin:0 0 .4em}
+.hp-card__body{color:var(--hp-text-muted);font-size:.96rem;margin:0}
+
+/* ------------------------------------------------------------------ Forms */
+.hp-field{display:flex;flex-direction:column;gap:.5em}
+.hp-label{font-size:var(--hp-text-sm);font-weight:600;color:var(--hp-text)}
+.hp-label .hp-req{color:var(--hp-danger)}
+.hp-input,.hp-textarea,.hp-select{
+  font-family:var(--hp-font-body);font-size:1rem;color:var(--hp-text);
+  background:var(--hp-surface);border:1px solid var(--hp-border-strong);
+  border-radius:var(--hp-radius-md);padding:.7em .9em;width:100%;
+  transition:border-color var(--hp-duration-2) var(--hp-ease),box-shadow var(--hp-duration-2) var(--hp-ease)}
+.hp-input::placeholder,.hp-textarea::placeholder{color:var(--hp-text-subtle)}
+.hp-input:focus,.hp-textarea:focus,.hp-select:focus{
+  outline:none;border-color:var(--hp-accent);box-shadow:0 0 0 3px var(--hp-focus-ring)}
+.hp-textarea{min-height:120px;resize:vertical}
+.hp-field--error .hp-input,.hp-field--error .hp-textarea{border-color:var(--hp-danger)}
+.hp-help{font-size:var(--hp-text-sm);color:var(--hp-text-muted)}
+.hp-field--error .hp-help{color:var(--hp-danger)}
+
+/* ------------------------------------------------------------------ Note / Callout */
+.hp-note{
+  display:flex;gap:.75em;padding:var(--hp-space-4) var(--hp-space-5);
+  border-radius:var(--hp-radius-md);border:1px solid var(--hp-border);
+  background:var(--hp-surface-2);color:var(--hp-text);font-size:.95rem}
+.hp-note--info{background:var(--hp-info-bg);border-color:transparent}
+.hp-note--success{background:var(--hp-success-bg);border-color:transparent}
+.hp-note--warning{background:var(--hp-warning-bg);border-color:transparent}
+.hp-note--danger{background:var(--hp-danger-bg);border-color:transparent}
+.hp-note__title{font-weight:600;margin:0 0 .2em}
+
+/* ------------------------------------------------------------------ Divider */
+.hp-divider{height:1px;background:var(--hp-border);border:0;margin:var(--hp-space-6) 0}
+
+/* ------------------------------------------------------------------ Layout helpers */
+.hp-container{width:100%;max-width:var(--hp-container);margin-inline:auto;padding-inline:var(--hp-space-5)}
+.hp-stack{display:flex;flex-direction:column}
+.hp-cluster{display:flex;flex-wrap:wrap;align-items:center;gap:var(--hp-space-3)}
