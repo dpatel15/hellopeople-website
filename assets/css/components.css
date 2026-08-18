@@ -82,18 +82,24 @@
 .hp-card__body{color:var(--hp-text-muted);font-size:.96rem;margin:0}
 
 /* ------------------------------------------------------------------ Forms */
-.hp-field{display:flex;flex-direction:column;gap:.5em}
+.hp-field{display:flex;flex-direction:column;gap:.5em;min-width:0}
 .hp-label{font-size:var(--hp-text-sm);font-weight:600;color:var(--hp-text)}
 .hp-label .hp-req{color:var(--hp-danger)}
 .hp-input,.hp-textarea,.hp-select{
   font-family:var(--hp-font-body);font-size:1rem;color:var(--hp-text);
   background:var(--hp-surface);border:1px solid var(--hp-border-strong);
-  border-radius:var(--hp-radius-md);padding:.7em .9em;width:100%;
+  border-radius:var(--hp-radius-md);padding:.7em .9em;width:100%;min-width:0;margin:0;
+  -webkit-appearance:none;appearance:none;
   transition:border-color var(--hp-duration-2) var(--hp-ease),box-shadow var(--hp-duration-2) var(--hp-ease)}
 .hp-input::placeholder,.hp-textarea::placeholder{color:var(--hp-text-subtle)}
 .hp-input:focus,.hp-textarea:focus,.hp-select:focus{
   outline:none;border-color:var(--hp-accent);box-shadow:0 0 0 3px var(--hp-focus-ring)}
 .hp-textarea{min-height:120px;resize:vertical}
+/* Custom dropdown arrow: consistent across browsers and always aligned to the
+   right edge. min-width:0 (above) stops a long option from widening the field. */
+.hp-select{cursor:pointer;padding-right:2.6em;text-overflow:ellipsis;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B6F7D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right .9em center;background-size:16px}
 .hp-field--error .hp-input,.hp-field--error .hp-textarea{border-color:var(--hp-danger)}
 .hp-help{font-size:var(--hp-text-sm);color:var(--hp-text-muted)}
 .hp-field--error .hp-help{color:var(--hp-danger)}
