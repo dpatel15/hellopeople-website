@@ -74,15 +74,35 @@ This folder is self-contained and ready to become the `hellopeople-website` repo
 
 `.nojekyll` is included so GitHub Pages serves every file as-is.
 
-## Wire up the form (optional)
+## Contact form: security and setup
 
-In `contact.html`, the `<form data-contact-form>` currently confirms in the
-browser only. To collect real submissions with no server, sign up for a form
-service and set the form `action` and `method`, for example:
+This is a static site, so there is no server of ours to attack: no database, no
+code runs a visitor's input, and the files GitHub serves never change from a
+submission. The real risks are spam and protecting the data people send, so the
+form is built with layered, no-backend defenses:
 
-```html
-<form data-contact-form action="https://formspree.io/f/yourid" method="POST" novalidate>
-```
+- **Managed delivery via Web3Forms**, no backend of ours to secure or get hacked.
+- **Honeypot** (`botcheck`), a hidden field only bots fill; dropped server-side.
+- **Time-trap**, submissions faster than 3 seconds are treated as bots.
+- **Cloudflare Turnstile**, a low-friction CAPTCHA, verified server-side.
+- **HTTPS** end to end, and submitted values are only ever sent as plain text
+  (nothing is rendered as HTML).
 
-Then remove the `e.preventDefault()` path in `site.js`, or keep the JS validation
-and let the service handle delivery.
+Until you add your keys the form safely confirms in the browser without sending,
+so the page never looks broken. To turn on real delivery:
+
+### 1. Web3Forms (delivery)
+1. Go to [web3forms.com](https://web3forms.com), enter the email that should
+   receive submissions, and copy your **Access Key**.
+2. In `contact.html`, replace `YOUR_WEB3FORMS_ACCESS_KEY` with it. This key is
+   public by design (it can only write to your inbox), so it is safe in the page.
+
+### 2. Cloudflare Turnstile (bot protection)
+1. In the [Cloudflare dashboard](https://dash.cloudflare.com) open **Turnstile**
+   and add a widget for your domain. Copy the **Site Key** and **Secret Key**.
+2. In `contact.html`, replace `YOUR_TURNSTILE_SITE_KEY` with the **Site Key**.
+3. In your **Web3Forms dashboard** (form Settings, captcha provider = Turnstile),
+   paste the **Secret Key**. The secret key stays there and is verified
+   server-side. **Never put the secret key in the page, in git, or in a chat.**
+
+That is the whole setup. No secret ever lives in this repo.

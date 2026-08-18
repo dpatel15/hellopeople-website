@@ -280,6 +280,11 @@ p{margin:0}
 @media (max-width:520px){.form-row{grid-template-columns:1fr}}
 .form-grid{display:grid;gap:var(--hp-space-4)}
 .form-note{margin-top:var(--hp-space-4);font-size:var(--hp-text-sm);color:var(--hp-text-muted)}
+/* Honeypot: off-screen, never focusable, invisible to real users */
+.hp-hp{position:absolute!important;left:-9999px!important;top:auto;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
+.cf-turnstile{min-height:65px}
+.form-error{display:none}
+.form-error.is-visible{display:flex}
 .form-success{display:none;text-align:center;padding:var(--hp-space-6) 0}
 .form-success.is-visible{display:block}
 .form-success .ok{width:64px;height:64px;border-radius:50%;background:var(--hp-success-bg);color:var(--hp-success);

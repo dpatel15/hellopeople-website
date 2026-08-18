@@ -101,38 +101,96 @@
   var yr = document.querySelector("[data-year]");
   if (yr) yr.textContent = new Date().getFullYear();
 
-  /* ----------------------------------------------------------- Contact form */
+  /* ----------------------------------------------------------- Contact form
+     Security posture (see contact.html + README):
+       - Delivery via Web3Forms, so there is no backend of ours to attack.
+       - Honeypot (botcheck) + a time-trap catch dumb bots for free.
+       - Cloudflare Turnstile catches the smart ones, verified server-side.
+       - We only ever send plain text; nothing is rendered as HTML. */
   var form = document.querySelector("[data-contact-form]");
   if (form) {
     var success = document.querySelector("[data-form-success]");
-    var showError = function (field, on) {
+    var errorBox = form.querySelector("[data-form-error]");
+    var submitBtn = form.querySelector("button[type=submit]");
+    var loadedAt = Date.now();
+    var accessKey = (form.querySelector("[name=access_key]") || {}).value || "";
+    var configured = accessKey && accessKey.indexOf("YOUR_") !== 0;
+
+    var showFieldError = function (field, on) {
       var wrap = field.closest(".hp-field");
       if (wrap) wrap.classList.toggle("hp-field--error", on);
     };
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
+    var showSuccess = function () {
+      if (!success) return;
+      form.style.display = "none";
+      if (errorBox) errorBox.classList.remove("is-visible");
+      success.classList.add("is-visible");
+      success.setAttribute("tabindex", "-1");
+      success.focus();
+    };
+    var showError = function () {
+      if (errorBox) errorBox.classList.add("is-visible");
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Try again"; }
+    };
+    var validate = function () {
       var ok = true;
-      var required = form.querySelectorAll("[required]");
-      required.forEach(function (field) {
+      form.querySelectorAll("[required]").forEach(function (field) {
         var valid = field.value.trim() !== "";
         if (valid && field.type === "email") {
           valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value.trim());
         }
-        showError(field, !valid);
-        if (!valid && ok) { field.focus(); }
+        showFieldError(field, !valid);
+        if (!valid && ok) field.focus();
         if (!valid) ok = false;
       });
-      if (!ok) return;
-      // No backend on a static host: show the confirmation, keep the values.
-      if (success) {
-        form.style.display = "none";
-        success.classList.add("is-visible");
-        success.setAttribute("tabindex", "-1");
-        success.focus();
-      }
+      return ok;
+    };
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (errorBox) errorBox.classList.remove("is-visible");
+
+      // Honeypot: a real user cannot tick a hidden box.
+      var hp = form.querySelector("[name=botcheck]");
+      if (hp && hp.checked) { showSuccess(); return; } // look normal, drop it
+
+      // Time-trap: a genuine person takes more than a few seconds to fill this.
+      if (Date.now() - loadedAt < 3000) { showSuccess(); return; }
+
+      if (!validate()) return;
+
+      // Not configured yet (keys still placeholders): confirm locally so the
+      // page never looks broken before Web3Forms is set up.
+      if (!configured) { showSuccess(); return; }
+
+      // Require the Turnstile token when the widget is present.
+      var widget = form.querySelector(".cf-turnstile");
+      var token = (form.querySelector("[name='cf-turnstile-response']") || {}).value || "";
+      if (widget && !token) { showError(); return; }
+
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Sending..."; }
+
+      var data = {};
+      new FormData(form).forEach(function (v, k) { if (k !== "botcheck") data[k] = v; });
+
+      fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (res && res.success) { showSuccess(); }
+        else { showError(); if (window.turnstile) try { window.turnstile.reset(); } catch (e) {} }
+      })
+      .catch(function () {
+        showError();
+        if (window.turnstile) try { window.turnstile.reset(); } catch (e) {}
+      });
     });
+
     form.addEventListener("input", function (e) {
-      if (e.target.closest(".hp-field--error")) showError(e.target, false);
+      if (e.target.closest(".hp-field--error")) showFieldError(e.target, false);
     });
   }
 })();

@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/site.css">
 <script>try{var t=localStorage.getItem('hp-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);document.documentElement.classList.add('js');}catch(e){}</script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -93,8 +94,16 @@
 
       <!-- Right: form -->
       <div class="form-card reveal">
-        <form data-contact-form novalidate>
+        <form data-contact-form action="https://api.web3forms.com/submit" method="POST" novalidate>
           <div class="form-grid">
+            <!-- Web3Forms delivery. The access key is public by design (write-only
+                 to your inbox). Replace with your key from web3forms.com. -->
+            <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
+            <input type="hidden" name="subject" value="New automation audit request, hellopeople.ca">
+            <input type="hidden" name="from_name" value="Hello People website">
+            <!-- Native Web3Forms honeypot: bots tick it, real users never see it.
+                 Verified server-side, so it also protects the no-JS fallback. -->
+            <input type="checkbox" name="botcheck" class="hp-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
             <div class="form-row">
               <div class="hp-field">
                 <label class="hp-label" for="name">Name <span class="hp-req">*</span></label>
@@ -133,8 +142,13 @@
               <textarea class="hp-textarea" id="message" name="message" required placeholder="What does your team spend too much time on right now?"></textarea>
               <span class="hp-help">A sentence or two is plenty.</span>
             </div>
+            <!-- Cloudflare Turnstile: low-friction, privacy-friendly bot check.
+                 The site key is public. The SECRET key is NOT here: it goes in
+                 your Web3Forms dashboard, which verifies the token server-side. -->
+            <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-theme="auto" data-size="flexible"></div>
+            <div class="hp-note hp-note--danger form-error" data-form-error role="alert">Something went wrong sending your message. Please email hello@hellopeople.ca and we will pick it up.</div>
             <button class="hp-btn hp-btn--primary hp-btn--lg hp-btn--block" type="submit">Book my automation audit <span class="hp-btn__arrow">&rarr;</span></button>
-            <p class="form-note">By sending this you agree to be contacted about your enquiry. No spam, ever.</p>
+            <p class="form-note">Protected by Cloudflare Turnstile. By sending this you agree to be contacted about your enquiry. No spam, ever.</p>
           </div>
         </form>
 
