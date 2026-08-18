@@ -282,7 +282,7 @@ p{margin:0}
 .form-note{margin-top:var(--hp-space-4);font-size:var(--hp-text-sm);color:var(--hp-text-muted)}
 /* Honeypot: off-screen, never focusable, invisible to real users */
 .hp-hp{position:absolute!important;left:-9999px!important;top:auto;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
-.cf-turnstile{min-height:65px}
+.h-captcha{min-height:78px}
 .form-error{display:none}
 .form-error.is-visible{display:flex}
 .form-success{display:none;text-align:center;padding:var(--hp-space-6) 0}

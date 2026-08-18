@@ -84,25 +84,24 @@ form is built with layered, no-backend defenses:
 - **Managed delivery via Web3Forms**, no backend of ours to secure or get hacked.
 - **Honeypot** (`botcheck`), a hidden field only bots fill; dropped server-side.
 - **Time-trap**, submissions faster than 3 seconds are treated as bots.
-- **Cloudflare Turnstile**, a low-friction CAPTCHA, verified server-side.
+- **hCaptcha**, via Web3Forms' free zero-config integration, verified server-side.
 - **HTTPS** end to end, and submitted values are only ever sent as plain text
   (nothing is rendered as HTML).
 
-Until you add your keys the form safely confirms in the browser without sending,
-so the page never looks broken. To turn on real delivery:
+The CAPTCHA is free: Web3Forms hosts the hCaptcha keys and verifies the token for
+you, so there is no secret to configure and no Cloudflare account needed. (Custom
+Turnstile/reCAPTCHA keys are a Web3Forms Pro feature; the free hCaptcha above is
+just as effective for a contact form.)
 
-### 1. Web3Forms (delivery)
-1. Go to [web3forms.com](https://web3forms.com), enter the email that should
-   receive submissions, and copy your **Access Key**.
+Until you add your access key the form safely confirms in the browser without
+sending, so the page never looks broken. The only setup step:
+
+### Web3Forms access key (the one thing to set)
+1. Go to [web3forms.com](https://web3forms.com), create/select your form, and copy
+   the **Access Key** (also emailed to you).
 2. In `contact.html`, replace `YOUR_WEB3FORMS_ACCESS_KEY` with it. This key is
-   public by design (it can only write to your inbox), so it is safe in the page.
+   public by design (it can only write to your inbox), so it is safe in the page
+   and in git.
 
-### 2. Cloudflare Turnstile (bot protection)
-1. In the [Cloudflare dashboard](https://dash.cloudflare.com) open **Turnstile**
-   and add a widget for your domain. Copy the **Site Key** and **Secret Key**.
-2. In `contact.html`, replace `YOUR_TURNSTILE_SITE_KEY` with the **Site Key**.
-3. In your **Web3Forms dashboard** (form Settings, captcha provider = Turnstile),
-   paste the **Secret Key**. The secret key stays there and is verified
-   server-side. **Never put the secret key in the page, in git, or in a chat.**
-
-That is the whole setup. No secret ever lives in this repo.
+The hCaptcha widget is already wired with Web3Forms' shared public sitekey, so it
+works as soon as the access key is set. No secret ever lives in this repo.

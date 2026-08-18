@@ -105,7 +105,8 @@
      Security posture (see contact.html + README):
        - Delivery via Web3Forms, so there is no backend of ours to attack.
        - Honeypot (botcheck) + a time-trap catch dumb bots for free.
-       - Cloudflare Turnstile catches the smart ones, verified server-side.
+       - hCaptcha (Web3Forms' free zero-config) catches the smart ones,
+         verified server-side by Web3Forms.
        - We only ever send plain text; nothing is rendered as HTML. */
   var form = document.querySelector("[data-contact-form]");
   if (form) {
@@ -163,9 +164,9 @@
       // page never looks broken before Web3Forms is set up.
       if (!configured) { showSuccess(); return; }
 
-      // Require the Turnstile token when the widget is present.
-      var widget = form.querySelector(".cf-turnstile");
-      var token = (form.querySelector("[name='cf-turnstile-response']") || {}).value || "";
+      // Require the hCaptcha token when the widget is present.
+      var widget = form.querySelector(".h-captcha");
+      var token = (form.querySelector("[name='h-captcha-response']") || {}).value || "";
       if (widget && !token) { showError(); return; }
 
       if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Sending..."; }
@@ -181,11 +182,11 @@
       .then(function (r) { return r.json(); })
       .then(function (res) {
         if (res && res.success) { showSuccess(); }
-        else { showError(); if (window.turnstile) try { window.turnstile.reset(); } catch (e) {} }
+        else { showError(); if (window.hcaptcha) try { window.hcaptcha.reset(); } catch (e) {} }
       })
       .catch(function () {
         showError();
-        if (window.turnstile) try { window.turnstile.reset(); } catch (e) {}
+        if (window.hcaptcha) try { window.hcaptcha.reset(); } catch (e) {}
       });
     });
 
