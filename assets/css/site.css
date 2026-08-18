@@ -276,9 +276,10 @@ p{margin:0}
 .contact-line a.v:hover{color:var(--hp-accent)}
 .form-card{background:var(--hp-surface);border:1px solid var(--hp-border);
   border-radius:var(--hp-radius-xl);box-shadow:var(--hp-shadow-md);padding:var(--hp-space-7)}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--hp-space-4)}
-@media (max-width:520px){.form-row{grid-template-columns:1fr}}
-.form-grid{display:grid;gap:var(--hp-space-4)}
+.form-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--hp-space-4);min-width:0}
+.form-row>*{min-width:0}
+@media (max-width:520px){.form-row{grid-template-columns:minmax(0,1fr)}}
+.form-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--hp-space-4)}
 .form-note{margin-top:var(--hp-space-4);font-size:var(--hp-text-sm);color:var(--hp-text-muted)}
 /* Honeypot: off-screen, never focusable, invisible to real users */
 .hp-hp{position:absolute!important;left:-9999px!important;top:auto;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
